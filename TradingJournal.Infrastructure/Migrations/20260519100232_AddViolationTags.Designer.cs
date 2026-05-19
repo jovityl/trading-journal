@@ -13,8 +13,8 @@ using TradingJournal.Infrastructure.Persistence;
 namespace TradingJournal.Infrastructure.Migrations
 {
     [DbContext(typeof(TradingJournalDbContext))]
-    [Migration("20260519072930_AddViolationTagsRemoveManualRatings")]
-    partial class AddViolationTagsRemoveManualRatings
+    [Migration("20260519100232_AddViolationTags")]
+    partial class AddViolationTags
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,10 +156,10 @@ namespace TradingJournal.Infrastructure.Migrations
                     b.Property<DateTime>("TradeDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<decimal?>("UnderlyingEntryPrice")
+                    b.Property<decimal>("UnderlyingEntryPrice")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("UnderlyingExitPrice")
+                    b.Property<decimal>("UnderlyingExitPrice")
                         .HasColumnType("numeric");
 
                     b.Property<Guid>("UserId")

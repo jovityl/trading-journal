@@ -153,10 +153,10 @@ namespace TradingJournal.Infrastructure.Migrations
                     b.Property<DateTime>("TradeDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<decimal?>("UnderlyingEntryPrice")
+                    b.Property<decimal>("UnderlyingEntryPrice")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("UnderlyingExitPrice")
+                    b.Property<decimal>("UnderlyingExitPrice")
                         .HasColumnType("numeric");
 
                     b.Property<Guid>("UserId")

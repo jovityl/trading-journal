@@ -79,10 +79,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Seed prompts on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<TradingJournalDbContext>();
+    await db.Database.MigrateAsync();
     await TradingJournal.Infrastructure.Persistence.PromptSeeder.SeedAsync(db);
 }
 
