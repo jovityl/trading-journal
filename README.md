@@ -81,7 +81,13 @@ Dependencies flow inward: Api → Application → Domain. Infrastructure impleme
 
 ### Docker (full stack)
 
-Runs the API, PostgreSQL, and frontend together:
+Runs the API, PostgreSQL, and frontend together.
+
+**Before you start you'll need:**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed
+- A free [Auth0](https://auth0.com) account — create an API + a SPA application
+- An [Anthropic](https://console.anthropic.com) API key — required for AI chart scoring
+- An [OpenRouter](https://openrouter.ai) API key — required for AI trade chat
 
 1. **Create a `.env` file** from the template
    ```bash
