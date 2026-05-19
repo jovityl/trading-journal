@@ -70,6 +70,7 @@ namespace TradingJournal.Api.Controllers
 
             return await _sender.Send(command);
         }
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("seed")]
         public async Task<BaseResponse<int>> SeedTrades()
         {
@@ -102,6 +103,7 @@ namespace TradingJournal.Api.Controllers
             return await _sender.Send(command);
         }
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("all")]
         public async Task<BaseResponse<int>> DeleteAllTrades()
         {
