@@ -85,8 +85,11 @@ Runs the API, PostgreSQL, and frontend together:
 
 1. **Create a `.env` file** from the template
    ```bash
+   # Windows
+   copy .env.example .env
+   # Mac/Linux
    cp .env.example .env
-   # fill in your real values
+   # then fill in your real values
    ```
 
 2. **Start everything**
