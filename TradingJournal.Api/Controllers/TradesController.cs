@@ -29,11 +29,12 @@ namespace TradingJournal.Api.Controllers
             [FromQuery] string? strategy,
             [FromQuery] DateTime? fromDate,
             [FromQuery] DateTime? toDate,
+            [FromQuery] string? violationTag,
             [FromQuery] int? pageSize,
             [FromQuery] int? pageNumber)
         {
             var auth0Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-            var query = new GetTradesQuery(auth0Id, ticker, optionType, strategy, fromDate, toDate, pageSize, pageNumber);
+            var query = new GetTradesQuery(auth0Id, ticker, optionType, strategy, fromDate, toDate, violationTag, pageSize, pageNumber);
             return await _sender.Send(query);
         }
 

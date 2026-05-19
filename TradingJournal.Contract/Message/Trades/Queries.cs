@@ -13,6 +13,7 @@ namespace TradingJournal.Contract.Message.Trades
             string? Strategy = null,
             DateTime? FromDate = null,
             DateTime? ToDate = null,
+            string? ViolationTag = null,
             int? PageSize = null,
             int? PageNumber = null) : IQuery<BaseResponse<IEnumerable<TradeDto>>>;
 

@@ -32,7 +32,8 @@ namespace TradingJournal.Application.Handlers.Trades.Queries
                     (request.OptionType == null || t.OptionType == request.OptionType) &&
                     (request.Strategy == null || t.Strategy == request.Strategy) &&
                     (request.FromDate == null || t.TradeDate >= request.FromDate) &&
-                    (request.ToDate == null || t.TradeDate <= request.ToDate),
+                    (request.ToDate == null || t.TradeDate <= request.ToDate) &&
+                    (request.ViolationTag == null || t.ViolationTags.Contains(request.ViolationTag)),
                 pageSize: request.PageSize,
                 pageNumber: request.PageNumber);
 
