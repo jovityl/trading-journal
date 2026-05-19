@@ -7,15 +7,19 @@
 ![EF Core](https://img.shields.io/badge/EF_Core-10-512BD4)
 ![Auth0](https://img.shields.io/badge/Auth0-EB5424?logo=auth0&logoColor=white)
 ![Claude](https://img.shields.io/badge/Claude-Sonnet_4.5-D97706)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
 ## ✨ Features
 
 - 🔐 **JWT auth** via Auth0 — every endpoint protected, user-scoped data
 - 📝 **Trades CRUD** — with chart + IBKR screenshot file upload
-- 📊 **Dashboard aggregation** — P&L, win rate, discipline score, charts
-- 🤖 **AI chart scoring** — Claude Sonnet 4.5 analyzes uploaded charts
-- ⚙️ **User settings** — daily loss/profit limits with alerts
-- 🧪 **Seed/wipe endpoints** — for easy local testing
+- 📊 **Dashboard aggregation** — P&L, win rate, discipline score, equity curve, daily P&L chart
+- 🤖 **AI chart scoring** — Claude Sonnet 4.5 analyzes uploaded charts and scores 0-100
+- 🏷 **Violation tags** — tag behavioral mistakes (FOMO, revenge trade, etc.) per trade
+- 📈 **Discipline analytics** — violation tag frequency stats and clean trade rate
+- 💬 **AI trade chat** — per-trade conversation with Claude using trade context
+- ⚙️ **User settings** — daily loss/profit limits with dashboard alerts
+- 🧪 **Seed/wipe endpoints** — admin-only, for local testing
 
 ## 🛠 Tech Stack
 
@@ -28,6 +32,7 @@
 | Auth | Auth0 (JWT bearer) |
 | AI | Anthropic Claude Sonnet 4.5 |
 | Storage | Local filesystem (S3-ready interface) |
+| Containerisation | Docker |
 
 ## 🏗 Architecture
 
@@ -64,7 +69,7 @@ Dependencies flow inward: Api → Application → Domain. Infrastructure impleme
 
 2. **Apply database migrations**
    ```bash
-   dotnet ef database update --project TradingJournal.Api
+   dotnet ef database update --project TradingJournal.Infrastructure --startup-project TradingJournal.Api
    ```
 
 3. **Run the API**
@@ -74,19 +79,52 @@ Dependencies flow inward: Api → Application → Domain. Infrastructure impleme
 
 4. API available at [https://localhost:7160](https://localhost:7160) — Swagger at `/swagger`
 
+### Docker (full stack)
+
+Runs the API, PostgreSQL, and frontend together:
+
+1. **Create a `.env` file** from the template
+   ```bash
+   cp .env.example .env
+   # fill in your real values
+   ```
+
+2. **Start everything**
+   ```bash
+   docker-compose up --build
+   ```
+
+- Frontend → `http://localhost:3000`
+- API → `http://localhost:8080`
+- Swagger → `http://localhost:8080/swagger`
+
+The API auto-migrates the database on startup. No manual migration step needed.
+
 ## 🔌 Key Endpoints
 
 | Method | Route | Description |
 |--------|-------|-------------|
-| GET | `/api/v1/dashboard` | Dashboard stats + charts |
-| GET | `/api/v1/trades` | List trades (with filters) |
+| GET | `/api/v1/dashboard` | Dashboard stats + charts + discipline analytics |
+| GET | `/api/v1/trades` | List trades (ticker, type, strategy, date, violation tag filters) |
 | GET | `/api/v1/trades/{id}` | Trade detail |
-| POST | `/api/v1/trades` | Log new trade (with files + AI scoring) |
+| POST | `/api/v1/trades` | Log new trade (files + AI scoring + violation tags) |
 | DELETE | `/api/v1/trades/{id}` | Delete a trade |
+| POST | `/api/v1/trades/{id}/chat` | Chat with Claude about a trade |
 | GET | `/api/v1/users/me` | Current user info |
 | PUT | `/api/v1/users/limits` | Update daily limits |
+| POST | `/api/v1/trades/seed` | Seed test data (admin only) |
+| DELETE | `/api/v1/trades/all` | Delete all trades (admin only) |
 
 All endpoints require `Authorization: Bearer <jwt>` header.
+
+## 🏷 Discipline System
+
+Each trade gets two scores:
+
+- **Discipline Score** — computed from violation tag count: 0 tags = 100, 1 = 70, 2 = 40, 3+ = 10. Objective and tamper-proof.
+- **AI Score** — Claude analyzes the uploaded chart image and scores 0-100 based on entry/exit quality.
+
+Available violation tags: `Revenge Trade`, `FOMO Entry`, `Oversized Position`, `Early Exit`, `Late Exit`, `Chased Entry`, `No Clear Setup`, `Broke Profit Target`, `Overtraded`.
 
 ## 🔗 Related
 
