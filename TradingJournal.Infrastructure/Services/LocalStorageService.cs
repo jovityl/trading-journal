@@ -20,7 +20,7 @@ namespace TradingJournal.Infrastructure.Services
             using var fileOutput = new FileStream(filePath, FileMode.Create);
             await fileStream.CopyToAsync(fileOutput, cancellationToken);
 
-            return $"/uploads/{uniqueFileName}";
+            return $"/api/v1/files/{uniqueFileName}";
         }
     }
 }
