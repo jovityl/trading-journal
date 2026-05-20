@@ -100,8 +100,10 @@ Runs the API, PostgreSQL, and frontend together.
 
 2. **Start everything**
    ```bash
-   docker-compose up --build
+   docker-compose up
    ```
+
+   This pulls pre-built images from Docker Hub — no build step needed.
 
 - Frontend → `http://localhost:3000`
 - API → `http://localhost:8080`
