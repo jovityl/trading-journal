@@ -33,6 +33,13 @@ namespace TradingJournal.Application.Handlers.Trades.Commands
 
         public async Task<BaseResponse<TradeDto>> Handle(CreateTradeCommand request, CancellationToken cancellationToken)
         {
+            if (request.EntryPrice <= 0) return BaseResponse<TradeDto>.BadRequest("Entry price must be greater than 0.");
+            if (request.ExitPrice <= 0) return BaseResponse<TradeDto>.BadRequest("Exit price must be greater than 0.");
+            if (request.Quantity <= 0) return BaseResponse<TradeDto>.BadRequest("Quantity must be greater than 0.");
+            if (request.Dte < 0) return BaseResponse<TradeDto>.BadRequest("DTE cannot be negative.");
+            if (request.UnderlyingEntryPrice <= 0) return BaseResponse<TradeDto>.BadRequest("Underlying entry price must be greater than 0.");
+            if (request.UnderlyingExitPrice <= 0) return BaseResponse<TradeDto>.BadRequest("Underlying exit price must be greater than 0.");
+
             // Find user by Auth0Id
             var user = await _userRepository.GetOneAsync(filter: u => u.Auth0Id == request.Auth0Id);
             if (user is null)
