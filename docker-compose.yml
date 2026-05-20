@@ -16,9 +16,7 @@ services:
       retries: 5
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: jovityl/trading-journal-api:latest
     ports:
       - "8080:8080"
     environment:
@@ -36,14 +34,7 @@ services:
       - uploads:/app/uploads
 
   frontend:
-    build:
-      context: ../trading-journal-frontend
-      dockerfile: Dockerfile
-      args:
-        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
-        - VITE_AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
-        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
-        - VITE_API_BASE_URL=http://localhost:8080
+    image: jovityl/trading-journal-frontend:latest
     ports:
       - "3000:80"
     depends_on:
