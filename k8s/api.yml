@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: jovityl/trading-journal-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              value: Host=postgres;Database=tradingjournal;Username=postgres;Password=postgres
+            - name: Auth0__Domain
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: Auth0__Domain
+            - name: Auth0__Audience
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: Auth0__Audience
+            - name: Anthropic__ApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: Anthropic__ApiKey
+            - name: OpenRouter__ApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: OpenRouter__ApiKey
+            - name: Admin__Emails__0
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: Admin__Emails__0
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  type: NodePort
+  selector:
+    app: api
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
